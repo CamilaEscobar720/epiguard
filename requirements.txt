@@ -1,0 +1,7 @@
+flask
+numpy
+neurokit2
+requests
+joblib
+gdown
+scikit-learn

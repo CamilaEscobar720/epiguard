@@ -1,0 +1,193 @@
+/* ── Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f5f5f0;
+  color: #1a1a18;
+  max-width: 480px;
+  margin: 0 auto;
+  padding-bottom: 40px;
+}
+
+/* ── Topbar ── */
+.topbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 16px;
+  background: #fff;
+  border-bottom: 1px solid #e5e3db;
+  position: sticky; top: 0; z-index: 10;
+}
+.topbar-logo { display: flex; align-items: center; gap: 10px; }
+.logo-circle {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #dbeafe; color: #1e40af;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px;
+}
+.app-name { font-size: 16px; font-weight: 700; }
+.conn-badge {
+  font-size: 12px; padding: 5px 12px;
+  background: #dcfce7; color: #166534;
+  border-radius: 20px; border: 1px solid #bbf7d0;
+}
+
+/* ── Nav ── */
+.nav-pills {
+  display: flex; gap: 6px; padding: 10px 16px;
+  background: #fff; border-bottom: 1px solid #e5e3db;
+  overflow-x: auto;
+}
+.pill {
+  padding: 6px 16px; border-radius: 20px; font-size: 13px;
+  border: 1px solid #d4d2ca; background: transparent;
+  color: #6b6b64; cursor: pointer; white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.pill.active { background: #dbeafe; color: #1e40af; border-color: #bfdbfe; font-weight: 600; }
+
+/* ── Pantallas ── */
+.pantalla { padding: 14px 16px; }
+.oculto   { display: none !important; }
+
+/* ── Banner estado ── */
+.status-banner {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border-radius: 12px;
+  background: #fff; border: 1px solid #e5e3db;
+  margin-bottom: 14px; transition: background 0.3s, border-color 0.3s;
+}
+.status-banner.alerta     { background: #fef2f2; border-color: #fecaca; }
+.status-banner.advertencia{ background: #fffbeb; border-color: #fde68a; }
+.status-icon  { font-size: 24px; flex-shrink: 0; }
+.status-title { font-size: 15px; font-weight: 700; color: #1a1a18; }
+.status-banner.alerta      .status-title { color: #dc2626; }
+.status-banner.advertencia .status-title { color: #d97706; }
+.status-sub   { font-size: 12px; color: #6b6b64; margin-top: 3px; }
+
+/* ── Métricas ── */
+.metricas {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin-bottom: 14px;
+}
+.metrica {
+  background: #fff; border-radius: 10px;
+  padding: 12px 14px; border: 1px solid #e5e3db;
+}
+.metrica-label { font-size: 11px; color: #6b6b64; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.3px; }
+.metrica-valor { font-size: 22px; font-weight: 700; color: #1a1a18; transition: color 0.3s; }
+.metrica-valor.ok          { color: #16a34a; }
+.metrica-valor.advertencia { color: #d97706; }
+.metrica-valor.peligro     { color: #dc2626; }
+.metrica-valor.gris        { color: #9ca3af; }
+.unidad { font-size: 13px; font-weight: 400; color: #6b6b64; }
+
+/* ── Cards ── */
+.card {
+  background: #fff; border-radius: 12px;
+  padding: 14px 16px; border: 1px solid #e5e3db;
+  margin-bottom: 14px;
+}
+.card-header {
+  display: flex; align-items: center;
+  justify-content: space-between; margin-bottom: 12px;
+}
+.card-title { font-size: 14px; font-weight: 700; }
+
+/* ── Badges ── */
+.badge { font-size: 11px; padding: 4px 10px; border-radius: 20px; font-weight: 600; }
+.badge.ok          { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+.badge.advertencia { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
+.badge.peligro     { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+.badge.gris        { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+
+/* ── Canvas ECG ── */
+#ecg-canvas {
+  width: 100%;
+  height: 80px;
+  display: block;
+  border-radius: 6px;
+  background: #fafaf8;
+}
+
+/* ── Electrodos ── */
+.electrodos { display: flex; flex-direction: column; gap: 8px; }
+.electrodo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; padding: 9px 12px;
+  background: #f9f9f7; border-radius: 8px;
+  border: 1px solid #e5e3db;
+}
+.dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; transition: background 0.3s; }
+.dot.ok    { background: #16a34a; box-shadow: 0 0 0 3px #dcfce7; }
+.dot.error { background: #dc2626; box-shadow: 0 0 0 3px #fecaca; }
+
+/* ── Batería ── */
+.batt-wrap {
+  background: #f0f0eb; border-radius: 6px;
+  height: 10px; overflow: hidden; margin-bottom: 7px;
+}
+.batt-bar { height: 100%; border-radius: 6px; transition: width 0.5s, background 0.3s; }
+.batt-bar.high { background: #16a34a; }
+.batt-bar.mid  { background: #d97706; }
+.batt-bar.low  { background: #dc2626; }
+.batt-info { font-size: 12px; color: #6b6b64; }
+
+/* ── Simulador ── */
+.sim-card { background: #f9f9f7; border-style: dashed; }
+.sim-card .card-title { font-size: 13px; color: #6b6b64; margin-bottom: 8px; }
+select {
+  width: 100%; padding: 9px 12px; border-radius: 8px;
+  border: 1px solid #d4d2ca; background: #fff;
+  font-size: 14px; cursor: pointer; color: #1a1a18;
+}
+
+/* ── Botones ── */
+.btn-danger {
+  width: 100%; padding: 12px; border-radius: 10px;
+  background: #dc2626; color: #fff; border: none;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+}
+.btn-danger:active { background: #b91c1c; }
+
+.btn-llamar {
+  padding: 10px 18px; border-radius: 10px;
+  background: #dc2626; color: #fff; border: none;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-secundario {
+  padding: 9px 14px; border-radius: 8px;
+  background: #fff; border: 1px solid #d4d2ca;
+  font-size: 13px; cursor: pointer; color: #1a1a18;
+  display: block; width: 100%; text-align: left;
+}
+.btn-secundario:active { background: #f5f5f0; }
+
+/* ── Alertas ── */
+.contacto-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+}
+.contacto-nombre { font-size: 15px; font-weight: 700; }
+.contacto-tel    { font-size: 13px; color: #6b6b64; margin-top: 2px; }
+
+.ubicacion-info {
+  font-size: 13px; color: #6b6b64;
+  padding: 9px 12px; background: #f9f9f7;
+  border-radius: 8px; margin-bottom: 10px;
+}
+
+/* ── Historial ── */
+.hist-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; background: #fff;
+  border-radius: 10px; border: 1px solid #e5e3db;
+  margin-bottom: 10px;
+}
+.hist-dot         { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.hist-dot.crisis  { background: #dc2626; }
+.hist-dot.preictal{ background: #d97706; }
+.hist-info        { flex: 1; }
+.hist-tipo        { font-size: 13px; font-weight: 600; }
+.hist-fecha       { font-size: 12px; color: #6b6b64; margin-top: 2px; }
+.hist-vacio       { text-align: center; padding: 40px 20px; color: #9ca3af; font-size: 14px; }

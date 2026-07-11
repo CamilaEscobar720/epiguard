@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EpiGuard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- BARRA SUPERIOR -->
+  <header class="topbar">
+    <div class="topbar-logo">
+      <div class="logo-circle">EP</div>
+      <span class="app-name">EpiGuard</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span id="reloj" style="font-size:13px;color:#6b6b64"></span>
+      <div class="conn-badge">● Conectado</div>
+    </div>
+  </header>
+
+  <!-- NAVEGACIÓN -->
+  <nav class="nav-pills">
+    <button class="pill active" data-pantalla="dashboard"  onclick="mostrarPantalla('dashboard')">Dashboard</button>
+    <button class="pill"        data-pantalla="alertas"    onclick="mostrarPantalla('alertas')">Alertas</button>
+    <button class="pill"        data-pantalla="historial"  onclick="mostrarPantalla('historial')">Historial</button>
+  </nav>
+
+
+  <!-- ══════════ DASHBOARD ══════════ -->
+  <section id="pantalla-dashboard" class="pantalla">
+
+    <!-- Banner estado -->
+    <div class="status-banner" id="status-banner">
+      <span class="status-icon" id="status-icon">✓</span>
+      <div>
+        <div class="status-title" id="status-title">Todo normal</div>
+        <div class="status-sub"   id="status-sub">Sin actividad epiléptica detectada · Clase A</div>
+      </div>
+    </div>
+
+    <!-- Métricas 2x2 -->
+    <div class="metricas">
+      <div class="metrica">
+        <div class="metrica-label">Frec. cardíaca</div>
+        <div class="metrica-valor ok" id="m-hr">72 <span class="unidad">bpm</span></div>
+      </div>
+      <div class="metrica">
+        <div class="metrica-label">Señal ECG</div>
+        <div class="metrica-valor ok" id="m-ecg">Estable</div>
+      </div>
+      <div class="metrica">
+        <div class="metrica-label">Movimiento IMU</div>
+        <div class="metrica-valor ok" id="m-imu">Bajo</div>
+      </div>
+      <div class="metrica">
+        <div class="metrica-label">Clasificación ML</div>
+        <div class="metrica-valor ok" id="m-ml">Clase A</div>
+      </div>
+    </div>
+
+    <!-- Gráfica ECG -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Señal ECG en tiempo real</span>
+        <span class="badge ok" id="ecg-badge">Estable</span>
+      </div>
+      <canvas id="ecg-canvas"></canvas>
+    </div>
+
+    <!-- Electrodos -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Electrodos</span>
+        <span class="badge ok" id="elec-badge">3/3 correctos</span>
+      </div>
+      <div class="electrodos">
+        <div class="electrodo"><span class="dot ok" id="dot-ra"></span> RA — hombro der.</div>
+        <div class="electrodo"><span class="dot ok" id="dot-la"></span> LA — hombro izq.</div>
+        <div class="electrodo"><span class="dot ok" id="dot-rl"></span> RL — cintura</div>
+      </div>
+    </div>
+
+    <!-- Batería -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Batería</span>
+        <span id="batt-pct">78%</span>
+      </div>
+      <div class="batt-wrap">
+        <div class="batt-bar high" id="batt-bar" style="width:78%"></div>
+      </div>
+      <div class="batt-info"><span id="batt-status">Uso normal · ~6h restantes</span></div>
+    </div>
+
+    <!-- Simulador -->
+    <div class="card sim-card">
+      <div class="card-title">Simular estado del dispositivo</div>
+      <select id="sim-select" onchange="simularEstado(this.value)">
+        <option value="normal">Actividad normal</option>
+        <option value="preictal">Alerta pre-ictal</option>
+        <option value="crisis">Crisis epiléptica</option>
+        <option value="cargando">Cargando batería</option>
+        <option value="electrodo">Electrodo mal colocado</option>
+      </select>
+    </div>
+
+  </section>
+
+
+  <!-- ══════════ ALERTAS ══════════ -->
+  <section id="pantalla-alertas" class="pantalla oculto">
+
+    <!-- Temporizador crisis -->
+    <div class="card" style="text-align:center">
+      <div class="card-title" style="margin-bottom:6px">Tiempo en crisis</div>
+      <div id="timer-crisis" style="font-size:52px;font-weight:700;letter-spacing:4px;display:none;font-variant-numeric:tabular-nums">00:00</div>
+      <div style="font-size:12px;color:#6b6b64;margin:6px 0 12px">
+        A los 4 min se avisa a emergencias · Máximo 5 min
+      </div>
+      <button class="btn-danger" onclick="detenerCrisis()">✓ La crisis terminó — detener alerta</button>
+    </div>
+
+    <!-- Prueba de audio -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:10px">Prueba de alertas de audio</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn-secundario" onclick="probarAudio('preictal')">🔊 Escuchar alerta pre-ictal</button>
+        <button class="btn-secundario" onclick="probarAudio('crisis')">🔊 Escuchar alerta de crisis</button>
+        <button class="btn-secundario" onclick="detenerAlertaAudio()">✕ Detener audio</button>
+      </div>
+      <p style="font-size:12px;color:#6b6b64;margin-top:10px">
+        Si no escuchas nada, toca primero cualquier parte de la pantalla y vuelve a intentarlo.
+      </p>
+    </div>
+
+    <!-- Contacto emergencia -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:10px">Contacto de emergencia</div>
+      <div class="contacto-row">
+        <div>
+          <div class="contacto-nombre" id="contacto-nombre">Mamá</div>
+          <div class="contacto-tel"    id="contacto-tel">+51 999 000 111</div>
+        </div>
+        <button class="btn-llamar" onclick="llamarEmergencia()">📞 Llamar</button>
+      </div>
+    </div>
+
+    <!-- GPS -->
+    <div class="card">
+      <div class="card-title" style="margin-bottom:8px">Ubicación GPS</div>
+      <div class="ubicacion-info" id="ubicacion-info">Sin ubicación guardada aún</div>
+      <button class="btn-secundario" onclick="obtenerUbicacion()">📍 Obtener ubicación actual</button>
+    </div>
+
+  </section>
+
+
+  <!-- ══════════ HISTORIAL ══════════ -->
+  <section id="pantalla-historial" class="pantalla oculto">
+    <div class="card-header" style="margin-bottom:12px;padding:0 0 8px;border-bottom:1px solid #e5e3db">
+      <span class="card-title">Eventos registrados</span>
+      <button class="btn-secundario" onclick="limpiarHistorial()">Borrar todo</button>
+    </div>
+    <div id="lista-historial"></div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
